@@ -1,8 +1,8 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
-
 import { cn } from "@/lib/utils"
+import { usePermissions } from "@/hooks/use-permission"
 
 const buttonVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -38,17 +38,37 @@ const buttonVariants = cva(
   }
 )
 
+interface ButtonProps
+  extends React.ComponentProps<"button">,
+  VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+  permission?: string,
+  isLoading?: boolean,
+  loadingText?: string,
+  fallback?: string
+}
+
 function Button({
   className,
   variant = "default",
   size = "default",
   asChild = false,
+  permission,
+  isLoading = false,
+  loadingText,
+  disabled,
+  children,
+  fallback,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
+  const { hasPermission } = usePermissions();
+  if (permission && !hasPermission(permission)) {
+    return fallback === undefined ? null : fallback;
+  }
+
   const Comp = asChild ? Slot.Root : "button"
+
+  const mergedDisabled = disabled || isLoading;
 
   return (
     <Comp
@@ -56,8 +76,11 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      disabled={mergedDisabled}
       {...props}
-    />
+    >
+      {isLoading ? (loadingText ?? children) : children}
+    </Comp>
   )
 }
 

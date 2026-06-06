@@ -2,13 +2,11 @@
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { PageHeader } from "../_components/page-header"
-import { orders } from "../orders/orders-data"
+import { orders } from "@/types/order"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
 import { marketDays } from "../demo-data"
 import { Button } from "@/components/ui/button"
 import { ViewConfig } from "@/components/list-shell/types"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 const ordersColumns = [
   {
     header: "Order",

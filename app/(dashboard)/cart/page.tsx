@@ -1,6 +1,6 @@
 "use client"
 
-import { productItems } from "../products/items/items-data"
+import { productItems } from "@/types/product"
 import { Button } from "@/components/ui/button"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
 import { DetailPageShell, DetailSection } from "@/components/detail-page"
@@ -19,15 +19,15 @@ const columns = [
     },
     {
         header: "Pack Size",
-        accessorKey: "packSize",
+        accessorKey: "size",
     },
     {
-        header: "Stock",
-        accessorKey: "stock",
+        header: "Quantity",
+        accessorKey: "quantity",
     },
     {
-        header: "Wholesale Price",
-        accessorKey: "wholesalePrice",
+        header: "Price",
+        accessorKey: "price",
     },
 ]
 

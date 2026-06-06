@@ -11,7 +11,7 @@ import {
   formatDate,
   getOrderTotal,
   orders,
-} from "../orders-data"
+} from "@/types/order"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
@@ -23,7 +23,7 @@ type OrderDetailPageProps = {
 }
 
 const columns = [
- {
+  {
     header: "Name",
     accessorKey: "name",
     cell: ({ row }: any) => <Badge variant="outline"><Link href={`/products/items/${row.original.id}`}>{row.original.name}</Link></Badge>,
@@ -62,7 +62,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
       backLabel="Orders"
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-6">
-        
+
         {/* Basic Information — Full Width */}
         <DetailSection
           title="Basic Information"
@@ -74,8 +74,8 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               fields: [
                 { label: "Customer", value: order.customer },
                 { label: "Location", value: order.location },
-                { label: "Payment",  value: order.paymentStatus },
-                { label: "Total",    value: formatCurrency(total), strong: true },
+                { label: "Payment", value: order.paymentStatus },
+                { label: "Total", value: formatCurrency(total), strong: true },
               ],
             },
           ]}
@@ -90,9 +90,9 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             {
               columns: 3,
               fields: [
-                { label: "Created",      value: formatDate(order.createdAt) },
+                { label: "Created", value: formatDate(order.createdAt) },
                 { label: "Last updated", value: formatDate(order.updatedAt) },
-                { label: "Delivery",     value: formatDate(order.deliveryDate) },
+                { label: "Delivery", value: formatDate(order.deliveryDate) },
               ],
             },
           ]}
@@ -111,7 +111,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                   label: "",
                   value: (
                     <div className="overflow-hidden rounded-lg border">
-                    <GenericDataTable data={order.items} columns={columns} getRowId={(row) => row.id} enableDragAndDrop={false} enableSelection={false} enablePagination={false} pageSize={5} />
+                      <GenericDataTable data={order.items} columns={columns} getRowId={(row) => row.id} enableDragAndDrop={false} enableSelection={false} enablePagination={false} pageSize={5} />
                     </div>
                   ),
                 },
@@ -121,15 +121,15 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         />
 
         {/* Created By — 2 Columns */}
-        <DetailSection 
-          title="Created By" 
+        <DetailSection
+          title="Created By"
           className="lg:col-span-2"
           rows={[
             {
               columns: 1,
               fields: [
                 { label: "Email", value: order.owner.email },
-                { label: "Name",  value: order.owner.name, strong: true },
+                { label: "Name", value: order.owner.name, strong: true },
               ],
             },
           ]}

@@ -24,11 +24,16 @@ import {
     DASHBOARD: { VIEW: 'dashboard:view' },
     PRODUCTS: {
       VIEW: 'products:view',
-      ITEMS: { VIEW: 'products:items:view' },
+      ITEMS: { 
+        VIEW: 'products:items:view',
+        CREATE: 'products:items:create',
+        UPDATE: 'products:items:update'
+       },
     },
     ORDERS: {
       VIEW: 'orders:view',
-      DISPATCH: { VIEW: 'orders:dispatch:view' },
+      CREATE: 'orders:create',
+      UPDATE: 'orders:update',
     },
     DEALERS: {
       VIEW: 'dealers:view',
@@ -89,11 +94,6 @@ import {
             title: 'Today\'s orders',
             url: '/orders/today',
             permission: PERMISSIONS.ORDERS.VIEW,
-          },
-          {
-            title: 'Dispatch queue',
-            url: '/orders/dispatch',
-            permission: PERMISSIONS.ORDERS.DISPATCH.VIEW,  // warehouse only
           },
         ],
       },
@@ -160,7 +160,7 @@ import {
         title: 'Reports',
         url: '/reports',
         icon: BarChart2,
-        permission: PERMISSIONS.REPORTS.VIEW,  // wholesaler only
+        permission: PERMISSIONS.REPORTS.VIEW,  
         items: [
           {
             title: 'Orders report',
@@ -178,7 +178,7 @@ import {
         title: 'Staff & access',
         url: '/staff',
         icon: UserCog,
-        permission: PERMISSIONS.STAFF.VIEW,  // wholesaler only
+        permission: PERMISSIONS.STAFF.VIEW, 
         items: [
           {
             title: 'Team members',
@@ -198,8 +198,8 @@ import {
   export const ROLE_PERMISSIONS: Record<string, string[]> = {
     wholesaler: [
       'dashboard:view',
-      'products:view', 'products:items:view',
-      'orders:view', 'orders:dispatch:view',
+      'products:view', 'products:items:view','products:items:update','products:items:create',
+      'orders:view', 'orders:create', 'orders:update',
       'dealers:view', 'dealers:dealer:view', 'dealers:market_days:view',
       'salesman:view', 'salesman:today:view', 'salesman:visits:view', 'salesman:manage:view',
       'billing:view', 'billing:create',

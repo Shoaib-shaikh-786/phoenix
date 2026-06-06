@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     Field,
     FieldDescription,
@@ -49,6 +50,13 @@ export function GenericForm({
     });
 
     const { handleSubmit } = form;
+
+    // Reset form when defaultValues change (e.g., when opening dialog with different product)
+    useEffect(() => {
+        if (defaultValues) {
+            form.reset(defaultValues);
+        }
+    }, [JSON.stringify(defaultValues)]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -133,11 +141,11 @@ function FormFieldRenderer({ field, form }: RendererProps) {
         validate:
             field.type === "integer"
                 ? (value: unknown) =>
-                      value === undefined ||
-                      value === null ||
-                      value === "" ||
-                      Number.isInteger(value) ||
-                      `${field.label} must be an integer`
+                    value === undefined ||
+                    value === null ||
+                    value === "" ||
+                    Number.isInteger(value) ||
+                    `${field.label} must be an integer`
                 : undefined,
     };
 
@@ -240,7 +248,7 @@ function FormFieldRenderer({ field, form }: RendererProps) {
                         rules={{ ...(field.required && { required: `${field.label} is required` }) }}
                         render={({ field: ctrl }) => (
                             <Select
-                                value={ctrl.value as string}
+                                value={(ctrl.value ?? "") as string}
                                 onValueChange={ctrl.onChange}
                                 disabled={disabled}
                             >

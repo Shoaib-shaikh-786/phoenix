@@ -6,7 +6,7 @@ import {
   DetailSection,
 } from "@/components/detail-page"
 
-import { getProductItem } from "../items-data"
+import { getProductItem } from "@/types/product"
 
 type ProductDetailPageProps = {
   params: Promise<{
@@ -29,7 +29,6 @@ export default async function ProductDetailPage({
     <DetailPageShell
       title={item.name}
       subtitle={`${item.sku} · ${item.category}`}
-      status={item.status}
       backHref="/products/items"
       backLabel="Products"
     >
@@ -56,10 +55,6 @@ export default async function ProductDetailPage({
                   label: "Category",
                   value: item.category,
                 },
-                {
-                  label: "Status",
-                  value: item.status,
-                },
               ],
             },
           ]}
@@ -71,17 +66,16 @@ export default async function ProductDetailPage({
           className="lg:col-span-2"
           rows={[
             {
-              columns: 1,
+              columns: 2,
               fields: [
                 {
                   label: "Pack Size",
-                  value: item.packSize,
+                  value: item.quantity,
                 },
                 {
-                  label: "Available Stock",
-                  value: item.stock,
-                  strong: true,
-                },
+                  label: "Units",
+                  value: item.unit
+                }
               ],
             },
           ]}
@@ -97,15 +91,12 @@ export default async function ProductDetailPage({
               fields: [
                 {
                   label: "Wholesale Price",
-                  value: `₹${item.wholesalePrice}`,
+                  value: `₹${item.price}`,
                   strong: true,
                 },
                 {
-                  label: "Availability",
-                  value:
-                    item.stock > 0
-                      ? "Ready to Order"
-                      : "Out of Stock",
+                  label: "Stock Available",
+                  value: item.quantity
                 },
               ],
             },
@@ -120,7 +111,7 @@ export default async function ProductDetailPage({
               columns: 1,
               fields: [
                 {
-                  label: "",
+                  label: "Description",
                   value:
                     "This product is a catalog item available for wholesale ordering. Use the Add to Order button to include it in a new order batch.",
                 },

@@ -2,17 +2,19 @@
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
-import { productItems } from "./items-data"
+import { productItems } from "@/types/product"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { useAddProductModal, useAddToCartModal } from "@/components/products/ProductModal"
+import { useProductModal, useAddToCartModal, useAddCategoriesModal } from "@/components/products/ProductModal"
 import { Plus } from "lucide-react"
+import { PERMISSIONS } from "@/lib/permission"
 
 
 export default function ItemsPage() {
-  const { dialog: addtoCartDialog, openDialog : openAddToCartDialog} = useAddToCartModal();
-  const {dialog: addProductDialog , openDialog: openAddProductDialog } = useAddProductModal()
+  const { dialog: addtoCartDialog, openDialog: openAddToCartDialog } = useAddToCartModal();
+  const { dialog: addCategoryDialog, openDialog: openAddCategoryDialog } = useAddCategoriesModal();
+  const { dialog: addProductDialog, openDialog: openProductDialog } = useProductModal({ openAddCategoryDialog });
   const columns = [
     {
       header: "Item",
@@ -28,24 +30,29 @@ export default function ItemsPage() {
       accessorKey: "category",
     },
     {
-      header: "Pack Size",
-      accessorKey: "packSize",
+      header: "Quanity",
+      accessorKey: "quantity",
     },
     {
-      header: "Stock",
-      accessorKey: "stock",
+      header: "Unit",
+      accessorKey: "unit"
     },
     {
-      header: "Wholesale Price",
-      accessorKey: "wholesalePrice",
+      header: "Price",
+      accessorKey: "price",
     },
     {
-      header: "Status",
-      accessorKey: "status",
+      header: "Description",
+      accessorKey: "description",
     },
     {
       header: "Action",
-      cell: ({ row }: any) => <Button variant="outline" onClick={() => openAddToCartDialog(row.original)}>Add to Cart</Button>,
+      cell: ({ row }: any) => (
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => openAddToCartDialog(row.original)}>Add to Cart</Button>
+          <Button variant="outline" onClick={() => openProductDialog(row.original)} permission={PERMISSIONS.PRODUCTS.ITEMS.UPDATE}>Update Item</Button>
+        </div>
+      ),
     },
   ];
   return (
@@ -54,7 +61,8 @@ export default function ItemsPage() {
         <div className="flex item-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Items</h1>
           <Button
-          onClick={()=>openAddProductDialog()}
+            onClick={() => openProductDialog()}
+            permission={PERMISSIONS.PRODUCTS.ITEMS.CREATE}
           >
             <Plus />
             Add Items
@@ -63,6 +71,7 @@ export default function ItemsPage() {
         <GenericDataTable data={productItems} columns={columns} getRowId={(row) => row.id} enableDragAndDrop={false} enableSelection={false} enablePagination={true} enableColumnVisibility={false} pageSize={10} />
       </Suspense>
       {addProductDialog}
+      {addCategoryDialog}
       {addtoCartDialog}
     </div>
   )

@@ -3,7 +3,7 @@ import { Suspense } from "react"
 
 import { ListFallback } from "../../_components/list-fallback"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
-import { orders } from "../orders-data"
+import { orders } from "@/types/order"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
