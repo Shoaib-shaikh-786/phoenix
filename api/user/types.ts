@@ -1,3 +1,10 @@
+export interface RolePayload {
+    phone: string
+}
+export interface RolePayload {
+    role: string
+    wholesaler_name: string
+}
 export interface LoginPayload {
     phone: string;
     password: string;

@@ -6,7 +6,7 @@ import type {
     UpdateProductPayload,
 } from './types';
 
-const BASE = '/products';
+const BASE = '/api/product';
 
 // ---------------------------------------------------------------------------
 // READ  — available to all authenticated users

@@ -1,20 +1,48 @@
 "use client"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { GenericDataTable } from "@/components/list-shell/data-list-wrapper"
-import { productItems } from "@/types/product"
+import type { Product } from '@/api/product/types'
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useProductModal, useAddToCartModal, useAddCategoriesModal } from "@/components/products/ProductModal"
 import { Plus } from "lucide-react"
 import { PERMISSIONS } from "@/lib/permission"
+import { listProducts } from '@/api/product/index'
 
 
 export default function ItemsPage() {
   const { dialog: addtoCartDialog, openDialog: openAddToCartDialog } = useAddToCartModal();
   const { dialog: addCategoryDialog, openDialog: openAddCategoryDialog } = useAddCategoriesModal();
   const { dialog: addProductDialog, openDialog: openProductDialog } = useProductModal({ openAddCategoryDialog });
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    listProducts()
+      .then((res: any) => {
+        if (!mounted) return;
+        setProducts(res?.data ?? []);
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        setError(err);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  console.log('products : ', products)
+  console.log('error : ', error)
   const columns = [
     {
       header: "Item",
@@ -68,7 +96,7 @@ export default function ItemsPage() {
             Add Items
           </Button>
         </div>
-        <GenericDataTable data={productItems} columns={columns} getRowId={(row) => row.id} enableDragAndDrop={false} enableSelection={false} enablePagination={true} enableColumnVisibility={false} pageSize={10} />
+        <GenericDataTable data={products} columns={columns} getRowId={(row) => row.id} enableDragAndDrop={false} enableSelection={false} enablePagination={true} enableColumnVisibility={false} pageSize={10} />
       </Suspense>
       {addProductDialog}
       {addCategoryDialog}

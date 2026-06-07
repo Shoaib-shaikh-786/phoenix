@@ -14,6 +14,11 @@ import type {
 // AUTH
 // ---------------------------------------------------------------------------
 
+/** POST /auth/Role */
+export const role = (payload: LoginPayload) =>
+    api.post<LoginResponse>('/auth/login', payload);
+
+
 /** POST /auth/login */
 export const login = (payload: LoginPayload) =>
     api.post<LoginResponse>('/auth/login', payload);
